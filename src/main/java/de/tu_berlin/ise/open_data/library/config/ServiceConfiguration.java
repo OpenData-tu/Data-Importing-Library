@@ -1,11 +1,11 @@
-package de.tu_berlin.ise.open_data.config;
+package de.tu_berlin.ise.open_data.library.config;
 
-import de.tu_berlin.ise.open_data.batch.StepProcessListener;
-import de.tu_berlin.ise.open_data.batch.JobCompletionNotificationListener;
-import de.tu_berlin.ise.open_data.batch.JsonItemWriter;
-import de.tu_berlin.ise.open_data.service.ApplicationServiceImpl;
-import de.tu_berlin.ise.open_data.service.JsonStringBuilder;
-import de.tu_berlin.ise.open_data.service.KafkaRecordProducerImpl;
+import de.tu_berlin.ise.open_data.library.service.ApplicationServiceImpl;
+import de.tu_berlin.ise.open_data.library.batch.StepProcessListener;
+import de.tu_berlin.ise.open_data.library.batch.JobCompletionNotificationListener;
+import de.tu_berlin.ise.open_data.library.batch.JsonItemWriter;
+import de.tu_berlin.ise.open_data.library.service.JsonStringBuilder;
+import de.tu_berlin.ise.open_data.library.service.KafkaRecordProducerImpl;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,13 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;
 
+/**
+ * Created by ahmadjawid on 6/13/17.
+ * Includes configuration for kafka.
+ * All re-usable beans are registered here
+ *
+ */
+
 @Configuration
 @EnableConfigurationProperties({KafkaProperties.class})
 public class ServiceConfiguration {
@@ -23,15 +30,18 @@ public class ServiceConfiguration {
     @Autowired
     private KafkaProperties kafkaProperties;
 
+
+    /**Set the properties of kafka producer
+     * @return KafkaProducer
+     * */
     @Bean
     Producer producer() {
 
         Properties properties = new Properties();
         properties.put("bootstrap.servers", kafkaProperties.getBootstrapServers());
-        properties.put("metadata.broker.list", kafkaProperties.getMetadataBrokerList());
-        properties.put("serializer.class", kafkaProperties.getSerializerClass());
         properties.put("key.serializer", kafkaProperties.getKeySerializer());
         properties.put("value.serializer", kafkaProperties.getValueSerializer());
+        properties.put("acks", kafkaProperties.getAcks());
 
         return new KafkaProducer(properties);
     }

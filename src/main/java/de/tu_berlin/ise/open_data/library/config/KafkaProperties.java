@@ -1,25 +1,26 @@
-package de.tu_berlin.ise.open_data.config;
+package de.tu_berlin.ise.open_data.library.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * Created by ahmadjawid on 6/13/17.
+ * Properties of kafka server are provided here.
+ * These values are overridden by application.properties overridden by environment variables
+ *
  */
 @Configuration
 @ConfigurationProperties("kafka")
 public class KafkaProperties {
 
+
+
+
     /**
-     * defaults to localhost:9092
+     * Number of replicas required to acknowledge the writing of data to the queue before proceeding.
+     * Defaults to all
      */
-    private String metadataBrokerList = "localhost:9092";
-    /**
-     * defaults to kafka.serializer.StringEncoder
-     */
-    private String serializerClass = "kafka.serializer.StringEncoder";
-    private String partitionerClass;
-    private String requestRequiredAcks;
+    private String acks = "all";
 
     /**
      * defaults to localhost:9092
@@ -35,41 +36,16 @@ public class KafkaProperties {
     private String valueSerializer = "org.apache.kafka.common.serialization.StringSerializer";
 
     /**
-     * defaults to weatherData
+     * defaults to topic
      */
+    private String topic = "topic";
 
-    private String topic = "weatherData";
-
-    public String getMetadataBrokerList() {
-        return metadataBrokerList;
+    public String getAcks() {
+        return acks;
     }
 
-    public void setMetadataBrokerList(String metadataBrokerList) {
-        this.metadataBrokerList = metadataBrokerList;
-    }
-
-    public String getSerializerClass() {
-        return serializerClass;
-    }
-
-    public void setSerializerClass(String serializerClass) {
-        this.serializerClass = serializerClass;
-    }
-
-    public String getPartitionerClass() {
-        return partitionerClass;
-    }
-
-    public void setPartitionerClass(String partitionerClass) {
-        this.partitionerClass = partitionerClass;
-    }
-
-    public String getRequestRequiredAcks() {
-        return requestRequiredAcks;
-    }
-
-    public void setRequestRequiredAcks(String requestRequiredAcks) {
-        this.requestRequiredAcks = requestRequiredAcks;
+    public void setAcks(String acks) {
+        this.acks = acks;
     }
 
     public String getBootstrapServers() {
